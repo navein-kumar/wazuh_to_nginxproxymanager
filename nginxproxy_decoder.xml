@@ -5,5 +5,5 @@
   <use_own_name>true</use_own_name>
   <prematch offset="after_parent">Client |http </prematch>
   <regex offset="after_parent">^\S+ \S+ (\S+) - (\S+) \S+ (\S+) "(\S+)" \S+ (\d+.\d+.\d+.\d+)</regex>
-  <order>id, method,domain,path,srcip</order>
+  <order>id, protocol,domain,url,srcip</order>
 </decoder>
