@@ -1,0 +1,7 @@
+<group name="web,accesslog,">
+  <rule id="222001" level="4">
+    <if_sid>31200</if_sid>
+     <match>Client</match>
+    <description>Web Access Request from $(srcip)</description>
+  </rule>
+</group>
