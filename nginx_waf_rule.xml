@@ -1,0 +1,26 @@
+<!-- Modify it at your will. -->
+<group name="web,accesslog,">
+ 
+  <rule id="100105" level="2">
+  <decoded_as>nginx-waf</decoded_as>
+  <description>nginx-waf decoded</description>
+</rule>
+    <rule id="100106" level="3">
+    <if_sid>100105</if_sid>
+    <id>^2|^3|^4|^5</id>
+    <description>Web Access Request from $(srcip)</description>
+  </rule>
+    <rule id="100107" level="0">
+    <if_sid>100105</if_sid>
+    <url>.jpg$|.gif$|favicon.ico$|.png$|robots.txt$|.css$|.js$|.jpeg$|.woff2$</url>
+    <compiled_rule>is_simple_http_request</compiled_rule>
+    <description>Ignored extensions on 400 error codes.</description>
+  </rule>
+  
+    <rule id="100108" level="0">
+    <if_sid>100105</if_sid>
+    <match>siem.codesec.in</match>
+    <description>Ignored extensions on 400 error codes.</description>
+  </rule>
+  
+</group>
