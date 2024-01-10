@@ -1,0 +1,43 @@
+<!-- 
+timestamp="08/Jan/2024:10:15:31 +0530" server="utilitiesintegrated.com" dest_port="443" dest_ip="172.18.0.7" src="162.158.163.150" src_ip="162.158.163.150" user="-" site="utilitiesintegrated.com" version="HTTP/2.0" id="404" bytes_out="132952" bytes_in="132928" http_referer="-" http_user_agent="Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.6099.129 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)" nginx_version="1.21.4" http_x_forwarded_for="2a06:98c0:3600::103" http_x_header="-" uri_query="taxonomy=product_shipping_class&term=cctv1458119.html" url="/index.php" http_method="GET" response_time="0.549" cookie="-" request_time="0.549" category="text/html; charset=UTF-8" postdata="-"
+-->
+
+<decoder name="nginxproxy_custom">
+ <program_name>nginxproxy_custom</program_name>
+  <parent>zeus</parent>
+  <type>web-log</type>
+  <use_own_name>true</use_own_name>
+  <prematch offset="after_parent">Client |http </prematch>
+  <regex offset="after_parent">^\S+ \S+ (\S+) - (\S+) \S+ (\S+) "(\S+)" \S+ (\d+.\d+.\d+.\d+)</regex>
+  <order>id, protocol,domain,url,srcip</order>
+</decoder>
+
+<decoder name="nginx-waf">
+    <prematch>^timestamp</prematch>
+</decoder>
+
+<decoder name="nginx-waf1">
+  <parent>nginx-waf</parent>
+  <regex>server="\S+" dest_port="(\d+)" dest_ip="(\S+)"</regex>
+  <order>dest_port,dest_ip</order>
+</decoder>
+<decoder name="nginx-waf1">
+  <parent>nginx-waf</parent>
+  <regex>src_ip="(\S+)" user="\S+" site="(\S+)" version="(\S+)" id="(\d+)"</regex>
+  <order>srcip,domain,version,id</order>
+</decoder>
+<decoder name="nginx-waf1">
+  <parent>nginx-waf</parent>
+  <regex>http_referer="(\.*)" http_user_agent="(\.*)"</regex>
+  <order>Referer,Useragent</order>
+</decoder>
+<decoder name="nginx-waf1">
+  <parent>nginx-waf</parent>
+  <regex>uri_query="(\.*)" url="(\.*)" http_method="(\S+)"</regex>
+  <order>uri_query,url,protocol</order>
+</decoder>
+<decoder name="nginx-waf1">
+  <parent>nginx-waf</parent>
+  <regex>category="(\.*)" postdata="(\.*)"</regex>
+  <order>type,postdata</order>
+</decoder>
